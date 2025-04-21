@@ -1,7 +1,7 @@
 const ID = 138192593;
 
 
-type LiveStatus =
+export type LiveStatus =
   | { status: "LIVE"; slug: string }
   | { status: "OFFLINE"; slug: string };
 
@@ -33,8 +33,13 @@ export async function get_live_data(
       status: "LIVE",
       slug: result.id.value,
     } as const;
+  } else {
+    return {
+      status: "OFFLINE",
+      slug: ""
+    }
   }
-  throw new Error("No live data found");
+
 }
 
 export async function get_cookies(

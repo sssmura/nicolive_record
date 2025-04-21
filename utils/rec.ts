@@ -4,7 +4,7 @@ export async function exec_ffmpeg_ts_record(m3u8Url: string, cookieHeaderValue: 
   // 実行したいFFmpegコマンド: ffmpeg -headers <ヘッダー> -i <URL> -c copy output.ts
 
   // 出力ファイル名 (拡張子を .ts に変更)
-  const outputFilename: string = Date.now().toString() + "_output_full.ts"; // <--- 拡張子を .ts に変更
+  const outputFilename: string = "./output/" + Date.now().toString() + "_output_full.ts"; // <--- 拡張子を .ts に変更
 
   const ffmpegCommandPath: string = "ffmpeg";
   const userAgentHeaderValue =
@@ -62,8 +62,8 @@ export async function exec_ffmpeg_ts_record(m3u8Url: string, cookieHeaderValue: 
         "エラー: 'ffmpeg' コマンドが見つかりません。FFmpegがインストールされ、PATH環境変数に追加されているか確認してください。",
       );
     } else {
-       // その他のエラー
-       console.error("予期せぬエラー:", (error as Deno.errors.NotFound).message);
+      // その他のエラー
+      console.error("予期せぬエラー:", (error as Deno.errors.NotFound).message);
     }
   }
 }

@@ -6,7 +6,7 @@ const send_data: StartWatching = {
   "type": "startWatching",
   "data": {
     "stream": {
-      "quality": "super_low",
+      "quality": "high",
       "protocol": "hls",
       "latency": "low",
       "accessRightMethod": "single_cookie",
@@ -54,19 +54,19 @@ export function init_ws(ws_ulr: string, timeout = 10000): Promise<[Stream, WebSo
     ws_clinet.onopen = () => {
       ws_clinet.send(JSON.stringify(send_data));
 
-    ws_clinet.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.type === "stream") {
-        clearTimeout(timeoutId);
-        const stream_data = data as Stream;
-        resolve([stream_data,ws_clinet]);
+      ws_clinet.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        if (data.type === "stream") {
+          clearTimeout(timeoutId);
+          const stream_data = data as Stream;
+          resolve([stream_data, ws_clinet]);
+        }
+        if (data.type === "ping") {
+          ws_clinet.send(JSON.stringify({ type: "pong" }));
+          ws_clinet.send(JSON.stringify({ type: "keepSeat" }));
+        }
+        console.log(data);
       }
-      if(data.type==="ping"){
-        ws_clinet.send(JSON.stringify({type:"pong"}));
-        ws_clinet.send(JSON.stringify({type:"keepSeat"}));
-      }
-      console.log(data);
-    }
     };
     ws_clinet.onerror = (error) => {
       clearTimeout(timeoutId);
@@ -75,3 +75,4 @@ export function init_ws(ws_ulr: string, timeout = 10000): Promise<[Stream, WebSo
     };
   });
 }
+
